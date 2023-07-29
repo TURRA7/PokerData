@@ -1,13 +1,11 @@
 import sys
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 
-'''
-"""Указание пуки до базы данных"""
-sys.path.append('../data_base')
-import data_base
-'''
+from database.connection import add_to_database, tuple_selection, table_data, total_money_lose, total_money_win, total_buy_in, total_tournament
+from other.user_help import info
 
 
 class MyLabel:
@@ -69,7 +67,6 @@ basic_window.geometry("475x210")
 basic_window.title("poker_statics")
 
 
-
 """Название 'общих' значений параметров из колонок в таблице"""
 money_spent_0 = MyLabel(basic_window, " MONEY\nSPENT:", 105, 130, 'Times 10')   # Label: MONEY SPENT.
 total_gain_0 = MyLabel(basic_window, " MONEY \nRECEIVED:", 100, 165, 'Times 10')   # Label: MONEY RECEIVED.
@@ -77,13 +74,11 @@ total_tournament_0 = MyLabel(basic_window, "TOURNAMENTS \n PLAYED:", 330, 130, '
 total_buy_in_0 = MyLabel(basic_window, "NUMBER OF \n INPUTS:", 345, 165, 'Times 10')   # Label: NUMBER OF INPUTS
 
 
-'''
 """Значение, передаваемые из БД, которые ссылаются на суммы значений колонок в таблице"""
-money_spent_1 = MyLabel(basic_window, f"{data_base.total_money_win} $", 160, 135, 'Times 15')   # Label: MONEY SPENT.
-total_tournament_1 = MyLabel(basic_window, data_base.total_tournament, 435, 135, 'Times 15')   # Label: TOURNAMENTS PLAYED.
-total_gain_1 = MyLabel(basic_window, f"{data_base.total_money_lose} $", 180, 170, 'Times 15')   # Label: MONEY RECEIVED.
-total_buy_in_1= MyLabel(basic_window, data_base.total_buy_in, 430, 170, 'Times 15')   # Label: NUMBER OF INPUTS
-'''
+money_spent_1 = MyLabel(basic_window, f"{total_money_win} $", 160, 135, 'Times 15')   # Label: MONEY SPENT.
+total_tournament_1 = MyLabel(basic_window, total_tournament, 435, 135, 'Times 15')   # Label: TOURNAMENTS PLAYED.
+total_gain_1 = MyLabel(basic_window, f"{total_money_lose} $", 180, 170, 'Times 15')   # Label: MONEY RECEIVED.
+total_buy_in_1= MyLabel(basic_window, total_buy_in, 430, 170, 'Times 15')   # Label: NUMBER OF INPUTS
 
 
 """Названия полей для ввода"""
@@ -108,7 +103,7 @@ buy_in_1 = MyEntry(basic_window, 340, 72)   # Поле для ввода от la
 gain_1 = MyEntry(basic_window, 340, 101)   # Поле для ввода от label: GAIN
 
 
-'''
+
 def open_statistics(data):
     """Создаёт окно, в котором располагается таблица,
     состоящая из 8 колонок, информация в которые, поступает из
@@ -133,28 +128,12 @@ def open_statistics(data):
     scrollpane.pack(side=tk.RIGHT, fill=tk.Y)
     table.pack(expand=tk.YES, fill=tk.BOTH)
     table.configure(yscrollcommand=scrollpane.set)
-'''
 
 
-'''
-btn_save = MyButton(basic_window, "SAVE", add_value_to_database, 10, 135)   # Кнопка сохранения данных из полей в базу данных
-btn_statistics = MyButton(basic_window, "STATISTICS", show_statistics, 7, 165)   # Кнопка открытия окна со статистикой (таблицекй).
-information = MyButton(basic_window, "?", information, 55, 135)   # Кнопка с открытием всплываюбщего информационного окна для пользователя
-'''
-
-
-'''
-def information():
-    """Всплывающее окно, с инструкцией по заполнению формы для пользователя. 
-    Функция принадлежит кнопке 'information'. """
-    messagebox.showinfo('FIELD FORMAT.', other.info)
-'''
-
-'''
 def add_value_to_database():
     """Активирует функцию 'add_to_database', которая берет значения с полей Entry и 
     заносит их в таблицу базы данных, через метод get_value()"""
-    data_base.add_to_database(
+    add_to_database(
     date_value_1.get_value(), 
     time_value_1.get_value(), 
     tournament_name_1.get_value(), 
@@ -164,10 +143,24 @@ def add_value_to_database():
     tournament_place_1.get_value(), 
     gain_1.get_value())
 
-'''
+
+def show_statistics():
+    """Открывает окно со статистикой(таблица) и подгружает в неё данные из БД"""
+    open_statistics(table_data)
 
 
-basic_window.mainloop()
+def information():
+    """Всплывающее окно, с инструкцией по заполнению формы для пользователя. 
+    Функция принадлежит кнопке 'information'. """
+    messagebox.showinfo('FIELD FORMAT.', info)
+
+btn_save = MyButton(basic_window, "SAVE", add_value_to_database, 10, 135)   # Кнопка сохранения данных из полей в базу данных
+btn_statistics = MyButton(basic_window, "STATISTICS", show_statistics, 7, 165)   # Кнопка открытия окна со статистикой (таблицекй).
+information = MyButton(basic_window, "?", information, 55, 135)   # Кнопка с открытием всплываюбщего информационного окна для пользователя
+
+
 def start_gui():
 	"""Функция запуска графического интерфейса"""
 	basic_window.mainloop()
+
+
