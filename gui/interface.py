@@ -8,6 +8,7 @@ from database.connection import add_to_database, tuple_selection, table_data, to
 from other.user_help import info
 
 
+
 class MyLabel:
 
     """Создаёт виджет Lbel(надпись), принимая параметры:
@@ -30,6 +31,8 @@ class MyEntry:
     """Создаёт виджет Entry(поле для ввода), принимая параметры:
     1. windows - окно в котором будет расположен виджет.
     2. x и y - координаты, по которым будет расположен виджет в окне"""
+    types = None
+
     def __init__(self, window, x, y):
         self.window = window
         self.x = x
@@ -37,7 +40,7 @@ class MyEntry:
         self.value = tk.StringVar()
         self.text = tk.Entry(self.window, textvariable=self.value)
         self.text.place(x=self.x, y=self.y)
-        
+
     def get_value(self):
         """Метод получения значений с поля для ввода Entry"""
         return self.value.get()
@@ -110,19 +113,29 @@ def open_statistics(data):
     таблицы statistics базы данных"""
     statistics = tk.Tk()
     statistics.geometry("950x400")
-    statistics.title("statics")
+    statistics.title("Statistics")
     statistics.resizable(width=False, height=False)
 
-    heads = ["DATE VALUE", "TIME VALUE", "TOURNAMENT NAME", "BUY-IN", "QUANITY BUY_IN", "PLAYER COUNT", "TOURNAMENT PLACE", "GAIN"]   # Названпие колонок в таблице
+    def sort_column(tree, col, reverse):
+        # Получаем данные в выбранной колонке
+        data = [(float(tree.set(child, col)), child) for child in tree.get_children('')]
+        # Сортируем данные
+        data.sort(reverse=reverse)
+        for index, (value, child) in enumerate(data):
+            tree.move(child, '', index)
+        # Обновляем заголовок колонки для отображения направления сортировки
+        tree.heading(col, command=lambda: sort_column(tree, col, not reverse))
+
+    heads = ["DATE VALUE", "TIME VALUE", "TOURNAMENT NAME", "BUY-IN", "QUANTITY BUY-IN", "PLAYER COUNT", "TOURNAMENT PLACE", "GAIN"]   # Названия колонок в таблице
 
     table = ttk.Treeview(statistics, show="headings")  
     table["columns"] = heads 
     for row in data:   
         table.insert('', tk.END, values=row)
     
-    for headers in heads:
-        table.heading(headers, text=headers, anchor="center")
-        table.column(headers, anchor="center", width=100)
+    for header in heads:
+        table.heading(header, text=header, anchor="center", command=lambda col=header: sort_column(table, col, False))
+        table.column(header, anchor="center", width=100)
 
     scrollpane = ttk.Scrollbar(statistics, command=table.yview)
     scrollpane.pack(side=tk.RIGHT, fill=tk.Y)
@@ -136,7 +149,7 @@ def add_value_to_database():
     add_to_database(
     date_value_1.get_value(), 
     time_value_1.get_value(), 
-    tournament_name_1.get_value(), 
+    tournament_name_1.get_value(),
     buy_in_1.get_value(), 
     quantity_buy_in_1.get_value(), 
     player_count_1.get_value(), 
@@ -162,5 +175,3 @@ information = MyButton(basic_window, "?", information, 55, 135)   # Кнопка
 def start_gui():
 	"""Функция запуска графического интерфейса"""
 	basic_window.mainloop()
-
-
