@@ -8,9 +8,7 @@ from database.connection import add_to_database, tuple_selection, table_data, to
 from other.user_help import info
 
 
-
 class MyLabel:
-
     """Создаёт виджет Lbel(надпись), принимая параметры:
     1. windows - окно в котором будет расположен виджет
     2. text - текст, который будет указан в виджете
@@ -27,12 +25,9 @@ class MyLabel:
 
 
 class MyEntry:
-
     """Создаёт виджет Entry(поле для ввода), принимая параметры:
     1. windows - окно в котором будет расположен виджет.
     2. x и y - координаты, по которым будет расположен виджет в окне"""
-    types = None
-
     def __init__(self, window, x, y):
         self.window = window
         self.x = x
@@ -47,7 +42,6 @@ class MyEntry:
 
 
 class MyButton:
-
     """Создаёт виджет Button(кнопка), принимая параметры:
     1. windows - окно в котором будет расположен виджет.
     2. text - текст, который будет указан кнопке.
@@ -106,7 +100,6 @@ buy_in_1 = MyEntry(basic_window, 340, 72)   # Поле для ввода от la
 gain_1 = MyEntry(basic_window, 340, 101)   # Поле для ввода от label: GAIN
 
 
-
 def open_statistics(data):
     """Создаёт окно, в котором располагается таблица,
     состоящая из 8 колонок, информация в которые, поступает из
@@ -127,9 +120,9 @@ def open_statistics(data):
         tree.heading(col, command=lambda: sort_column(tree, col, not reverse))
 
     heads = ["DATE VALUE", "TIME VALUE", "TOURNAMENT NAME", "BUY-IN", "QUANTITY BUY-IN", "PLAYER COUNT", "TOURNAMENT PLACE", "GAIN"]   # Названия колонок в таблице
-
     table = ttk.Treeview(statistics, show="headings")  
-    table["columns"] = heads 
+    table["columns"] = heads
+
     for row in data:   
         table.insert('', tk.END, values=row)
     
@@ -166,6 +159,7 @@ def information():
     """Всплывающее окно, с инструкцией по заполнению формы для пользователя. 
     Функция принадлежит кнопке 'information'. """
     messagebox.showinfo('FIELD FORMAT.', info)
+
 
 btn_save = MyButton(basic_window, "SAVE", add_value_to_database, 10, 135)   # Кнопка сохранения данных из полей в базу данных
 btn_statistics = MyButton(basic_window, "STATISTICS", show_statistics, 7, 165)   # Кнопка открытия окна со статистикой (таблицекй).

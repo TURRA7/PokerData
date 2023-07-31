@@ -2,14 +2,14 @@ from os import path
 from sqlite3 import connect
 from tkinter import messagebox
 
+
 current_file_path = path.abspath(__file__)
 db_name = "db_statistics.db"
 file_path = path.join(path.dirname(current_file_path), db_name)
 
+
 def start_sql():
     """Создаёт и запускает базу данных, к оторой находится таблица statistics"""
-    
-
     with connect(file_path) as connection:
         cursor = connection.cursor()
         cursor.execute("""CREATE TABLE IF NOT EXISTS statistics (
@@ -56,11 +56,6 @@ def tuple_selection():
         records = cursor.fetchall()
         employee_tuples_list = [tuple(record) for record in records]
         return employee_tuples_list
-    print("Data converted...")
-    connection.commit()
-
-
-"""messagebox.showinfo('CONSERVATION', "CHECK THAT THE DATA ENTERED рректности введённых данных"""
 
 
 def get_total_tournament():
@@ -74,8 +69,6 @@ def get_total_tournament():
             return sum_result
         else:
             return 0
-    print("Value received...")
-    connection.commit()
 
 
 def count_buy_in():
@@ -90,8 +83,6 @@ def count_buy_in():
             return sum_result
         else:
             return 0
-    print("Value received...")
-    connection.commit()
 
 
 def count_money_win():
@@ -106,8 +97,6 @@ def count_money_win():
             return sum_result
         else:
             return 0
-    print("Value received...")
-    connection.commit()
 
 
 def count_money_lose():
@@ -122,8 +111,6 @@ def count_money_lose():
             return sum_result
         else:
             return 0
-    print("Value received...")
-    connection.commit()
 
 
 table_data = tuple_selection()
@@ -131,5 +118,3 @@ total_money_lose = float(count_money_lose())
 total_money_win = float(count_money_win())
 total_buy_in = int(count_buy_in())
 total_tournament = int(get_total_tournament())
-
-
