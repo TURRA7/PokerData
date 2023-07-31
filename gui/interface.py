@@ -108,12 +108,7 @@ def open_statistics(data):
     statistics = Toplevel()
     statistics.geometry("970x400")
     statistics.title("Statistics")
-    statistics.resizable(width=False, height=False)
-
-    def update(): 
-        data = tuple_selection() 
-        return data 
-        statistics.after(1000, update) 
+    statistics.resizable(width=False, height=False) 
 
     def update():
         data = tuple_selection()

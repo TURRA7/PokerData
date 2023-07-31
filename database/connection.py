@@ -112,7 +112,6 @@ def count_money_lose():
         else:
             return 0
 
-
 table_data = tuple_selection()
 total_money_lose = float(count_money_lose())
 total_money_win = float(count_money_win())
