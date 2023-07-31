@@ -2,6 +2,7 @@ import sys
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import Toplevel
 
 
 from database.connection import add_to_database, tuple_selection, table_data, total_money_lose, total_money_win, total_buy_in, total_tournament
@@ -104,10 +105,20 @@ def open_statistics(data):
     """Создаёт окно, в котором располагается таблица,
     состоящая из 8 колонок, информация в которые, поступает из
     таблицы statistics базы данных"""
-    statistics = tk.Tk()
-    statistics.geometry("950x400")
+    statistics = Toplevel()
+    statistics.geometry("970x400")
     statistics.title("Statistics")
     statistics.resizable(width=False, height=False)
+
+    def update(): 
+        data = tuple_selection() 
+        return data 
+        statistics.after(1000, update) 
+
+    def update():
+        data = tuple_selection()
+        return data
+        statistics.after(1000, update)
 
     def sort_column(tree, col, reverse):
         # Получаем данные в выбранной колонке
@@ -119,12 +130,15 @@ def open_statistics(data):
         # Обновляем заголовок колонки для отображения направления сортировки
         tree.heading(col, command=lambda: sort_column(tree, col, not reverse))
 
+    def update_statistics():
+        table.delete(*table.get_children())  # Clear the current table contents
+        for row in update():
+            table.insert('', tk.END, values=row)
+        statistics.after(1000, update_statistics)
+
     heads = ["DATE VALUE", "TIME VALUE", "TOURNAMENT NAME", "BUY-IN", "QUANTITY BUY-IN", "PLAYER COUNT", "TOURNAMENT PLACE", "GAIN"]   # Названия колонок в таблице
     table = ttk.Treeview(statistics, show="headings")  
     table["columns"] = heads
-
-    for row in data:   
-        table.insert('', tk.END, values=row)
     
     for header in heads:
         table.heading(header, text=header, anchor="center", command=lambda col=header: sort_column(table, col, False))
@@ -134,6 +148,8 @@ def open_statistics(data):
     scrollpane.pack(side=tk.RIGHT, fill=tk.Y)
     table.pack(expand=tk.YES, fill=tk.BOTH)
     table.configure(yscrollcommand=scrollpane.set)
+
+    update_statistics()
 
 
 def add_value_to_database():
@@ -169,3 +185,4 @@ information = MyButton(basic_window, "?", information, 55, 135)   # Кнопка
 def start_gui():
 	"""Функция запуска графического интерфейса"""
 	basic_window.mainloop()
+

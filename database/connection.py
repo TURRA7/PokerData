@@ -43,9 +43,9 @@ def add_to_database(date_value, time_value, tournament_name, buy_in, quantity_bu
             tournament_place,
             gain
         ))
-    print("Value added...")
-    messagebox.showinfo('CONSERVATION', "RECORD SAVED")
-    connection.commit()
+        print("Value added...")
+        messagebox.showinfo('CONSERVATION', "RECORD SAVED")
+        connection.commit()
 
 
 def tuple_selection():
