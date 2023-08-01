@@ -5,7 +5,7 @@ from tkinter import messagebox
 from tkinter import Toplevel
 
 
-from database.connection import add_to_database, tuple_selection, table_data, total_money_lose, total_money_win, total_buy_in, total_tournament
+from database.connection import add_to_database, tuple_selection, table_data, total_money_lose, total_money_win, total_buy_in, total_tournament, count_money_win, get_total_tournament, count_money_lose, count_buy_in
 from other.user_help import info
 
 
@@ -72,12 +72,37 @@ total_tournament_0 = MyLabel(basic_window, "TOURNAMENTS \n PLAYED:", 330, 130, '
 total_buy_in_0 = MyLabel(basic_window, "NUMBER OF \n INPUTS:", 345, 165, 'Times 10')   # Label: NUMBER OF INPUTS
 
 
-"""Значение, передаваемые из БД, которые ссылаются на суммы значений колонок в таблице"""
-money_spent_1 = MyLabel(basic_window, f"{total_money_win} $", 160, 135, 'Times 15')   # Label: MONEY SPENT.
-total_tournament_1 = MyLabel(basic_window, total_tournament, 435, 135, 'Times 15')   # Label: TOURNAMENTS PLAYED.
-total_gain_1 = MyLabel(basic_window, f"{total_money_lose} $", 180, 170, 'Times 15')   # Label: MONEY RECEIVED.
-total_buy_in_1= MyLabel(basic_window, total_buy_in, 430, 170, 'Times 15')   # Label: NUMBER OF INPUTS
 
+
+def total_money_win():
+    data = float(count_money_win())
+    return data
+    basic_window.after(1000, total_money_win)
+
+def total_tournament():
+    data = int(get_total_tournament())
+    return data
+    basic_window.after(1000, total_tournament)
+
+def total_money_lose():
+    data = float(count_money_lose())
+    return data
+    basic_window.after(1000, total_money_lose)
+
+def total_buy_in():
+    data = int(count_buy_in())
+    return data
+    basic_window.after(1000, total_buy_in)
+
+def update_label():
+    money_spent_1 = MyLabel(basic_window, f"{total_money_win()} $", 160, 135, 'Times 15') 
+    total_tournament_1 = MyLabel(basic_window, total_tournament(), 435, 135, 'Times 15') 
+    total_gain_1 = MyLabel(basic_window, f"{total_money_lose()} $", 180, 170, 'Times 15') 
+    total_buy_in_1= MyLabel(basic_window, total_buy_in(), 430, 170, 'Times 15') 
+    basic_window.after(1000, update_label)
+
+
+update_label()
 
 """Названия полей для ввода"""
 tournament_name_0 = MyLabel(basic_window, "TOURNAMENT NAME:", 5, 11, 'Times 10')   # Label: TOURNAMENT NAME
