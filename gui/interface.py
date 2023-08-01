@@ -5,7 +5,9 @@ from tkinter import messagebox
 from tkinter import Toplevel
 
 
-from database.connection import add_to_database, tuple_selection, table_data, total_money_lose, total_money_win, total_buy_in, total_tournament, count_money_win, get_total_tournament, count_money_lose, count_buy_in
+from database.connection import add_to_database, tuple_selection, table_data,\
+total_money_lose, total_money_win, total_buy_in, total_tournament, count_money_win, \
+get_total_tournament, count_money_lose, count_buy_in, full_cleaning
 from other.user_help import info
 
 
@@ -61,7 +63,7 @@ class MyButton:
 
 """Создание окна в приложении"""
 basic_window = tk.Tk()
-basic_window.geometry("475x210")
+basic_window.geometry("485x210")
 basic_window.title("poker_statics")
 
 
@@ -95,14 +97,14 @@ def total_buy_in():
     basic_window.after(1000, total_buy_in)
 
 def update_label():
-    money_spent_1 = MyLabel(basic_window, f"{total_money_win()} $", 160, 135, 'Times 15') 
-    total_tournament_1 = MyLabel(basic_window, total_tournament(), 435, 135, 'Times 15') 
-    total_gain_1 = MyLabel(basic_window, f"{total_money_lose()} $", 180, 170, 'Times 15') 
-    total_buy_in_1= MyLabel(basic_window, total_buy_in(), 430, 170, 'Times 15') 
-    basic_window.after(1000, update_label)
-
+        money_spent_1 = MyLabel(basic_window, f"{total_money_win()} $", 160, 135, 'Times 15') 
+        total_tournament_1 = MyLabel(basic_window, total_tournament(), 435, 135, 'Times 15') 
+        total_gain_1 = MyLabel(basic_window, f"{total_money_lose()} $", 180, 170, 'Times 15') 
+        total_buy_in_1= MyLabel(basic_window, total_buy_in(), 430, 170, 'Times 15') 
+        basic_window.after(1000, update_label)
 
 update_label()
+
 
 """Названия полей для ввода"""
 tournament_name_0 = MyLabel(basic_window, "TOURNAMENT NAME:", 5, 11, 'Times 10')   # Label: TOURNAMENT NAME
@@ -197,10 +199,17 @@ def information():
     messagebox.showinfo('FIELD FORMAT.', info)
 
 
-btn_save = MyButton(basic_window, "SAVE", add_value_to_database, 10, 135)   # Кнопка сохранения данных из полей в базу данных
-btn_statistics = MyButton(basic_window, "STATISTICS", show_statistics, 7, 165)   # Кнопка открытия окна со статистикой (таблицекй).
-information = MyButton(basic_window, "?", information, 55, 135)   # Кнопка с открытием всплываюбщего информационного окна для пользователя
+def clean():
+    choice = messagebox.askyesno("CLEAN", "Do you really want to completely clear the table ?")
+    if choice:
+        full_cleaning()
+        messagebox.showinfo("CLEAN", "The table has been cleared!\nPlease restart the program")
 
+
+btn_save = MyButton(basic_window, "SAVE", add_value_to_database, 8, 140)   # Кнопка сохранения данных из полей в базу данных
+btn_statistics = MyButton(basic_window, "STATISTICS", show_statistics, 7, 170)   # Кнопка открытия окна со статистикой (таблицекй).
+information = MyButton(basic_window, "?", information, 10, 100)   # Кнопка с открытием всплываюбщего информационного окна для пользователя
+btn_clean = MyButton(basic_window, "♻️", clean, 50, 140)
 
 def start_gui():
 	"""Функция запуска графического интерфейса"""

@@ -113,6 +113,16 @@ def count_money_lose():
             return 0
 
 
+def full_cleaning():
+    with connect(file_path) as connection:
+        cursor = connection.cursor()
+        sql_query = "DELETE FROM statistics;"
+        cursor.execute(sql_query)
+        connection.commit()
+        print("The table has been successfully cleared...")
+        connection.commit()
+
+
 table_data = tuple_selection()
 total_money_lose = float(count_money_lose())
 total_money_win = float(count_money_win())
