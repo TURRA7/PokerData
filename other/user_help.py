@@ -1,5 +1,5 @@
-"""Переменная, которая хранит в себе информацию для пользователя
-по зщаполнению формы, поступает в функцию information() в модуле poker_statistics"""
+# Information for the user on filling out the form, 
+# is fed to the 'information()' function in the 'interface' module.
 info = "FIELD FORMAT:\n1.TOURNAMENT NAME: 'string'\
 \nEXAMPLE: 'World Series of Poker Circuit...'\n \n\
 2.QUANTINTY BUY IN: 'integer'\nEXAMPLE: 5 or 7 or ...\n \n\

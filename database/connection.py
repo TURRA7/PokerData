@@ -3,13 +3,17 @@ from sqlite3 import connect
 from tkinter import messagebox
 
 
+# Defining the path to the database.
 current_file_path = path.abspath(__file__)
 db_name = "db_statistics.db"
 file_path = path.join(path.dirname(current_file_path), db_name)
 
 
 def start_sql():
-    """Создаёт и запускает базу данных, к оторой находится таблица statistics"""
+    """
+    Creates and runs a database, 
+    which contains a table 'statistics'.
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         cursor.execute("""CREATE TABLE IF NOT EXISTS statistics (
@@ -22,17 +26,23 @@ def start_sql():
                     tournament_place INT, 
                     gain FLOAT
             )""")
-
     print("Connection database...")
     connection.commit()
 
 
-def add_to_database(date_value, time_value, tournament_name, buy_in, quantity_buy_in, player_count, tournament_place, gain):
-    """Принимает в качестве аргументов 8 переменных(вызванных через метод get_value())
-    и сохраняет их в таблицу базы данных"""
+def add_to_database(date_value, time_value, tournament_name, buy_in, \
+    quantity_buy_in, player_count, tournament_place, gain):
+    """
+    Takes 8 variables as arguments
+    (called through the method 'get_value()' from the 'MyEntry' class)
+    and saves them to a database table
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS statistics (date_value TEXT, time_value TEXT, tournament_name TEXT, buy_in REAL, quantity_buy_in INTEGER, player_count INTEGER, tournament_place INTEGER, gain REAL)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS statistics (\
+        date_value TEXT, time_value TEXT, tournament_name TEXT,\
+        buy_in REAL, quantity_buy_in INTEGER, \
+        player_count INTEGER, tournament_place INTEGER, gain REAL)")
         cursor.execute("INSERT INTO statistics VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (
             date_value,
             time_value,
@@ -49,7 +59,9 @@ def add_to_database(date_value, time_value, tournament_name, buy_in, quantity_bu
 
 
 def tuple_selection():
-    """Выбирает все данные из таблицы, и возвращает их в виде картежа"""
+    """
+    Selects all the data from the table, and returns it as a tuple
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM statistics")
@@ -59,8 +71,10 @@ def tuple_selection():
 
 
 def get_total_tournament():
-    """Выбирает данные из колонки tournament_name 
-    и возвращает сумму значений всех ячеек в колонке"""
+    """
+    Selects data from the 'tournament_name' column 
+    and returns the sum of the values of all cells in the column
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         cursor.execute('SELECT COUNT(tournament_name) FROM statistics')
@@ -72,8 +86,10 @@ def get_total_tournament():
 
 
 def count_buy_in():
-    """Выбирает данные из колонки quantity_buy_in
-    и возвращает сумму значений всех ячеек в колонке"""
+    """
+    Selects data from the 'quantity_buy_in' column
+    and returns the sum of the values of all cells in the column
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         sql_query = "SELECT SUM(quantity_buy_in) FROM statistics;"
@@ -86,8 +102,10 @@ def count_buy_in():
 
 
 def count_money_win():
-    """Выбирает данные из колонки gain
-    и возвращает сумму значений всех ячеек в колонке"""
+    """
+    Selects data from the 'gain' column
+    and returns the sum of the values of all cells in the column
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         sql_query = "SELECT SUM(gain) FROM statistics;"
@@ -100,8 +118,10 @@ def count_money_win():
 
 
 def count_money_lose():
-    """Выбирает данные из колонки buy_in
-    и возвращает сумму значений всех ячеек в колонке"""
+    """
+    Selects data from the 'buy_in' column
+    and returns the sum of the values of all cells in the column
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         sql_query = "SELECT SUM(buy_in) FROM statistics;"
@@ -114,6 +134,9 @@ def count_money_lose():
 
 
 def full_cleaning():
+    """
+    Completely clears the table
+    """
     with connect(file_path) as connection:
         cursor = connection.cursor()
         sql_query = "DELETE FROM statistics;"
@@ -123,6 +146,7 @@ def full_cleaning():
         connection.commit()
 
 
+# Variables in which the results of function execution are stored.
 table_data = tuple_selection()
 total_money_lose = float(count_money_lose())
 total_money_win = float(count_money_win())
